@@ -17,12 +17,13 @@
     <table class="w-full border-collapse">
       <thead>
         <tr>
-          <th class="border p-2">Tiêu đề</th>
-          <th class="border p-2">Tác giả</th>
+          <th class="border p-2">Tên sách</th>
+          <th class="border p-2">Hình ảnh</th>
+          <th class="border p-2">Đơn giá</th>
           <th class="border p-2">Nhà xuất bản</th>
-          <th class="border p-2">Thể loại</th>
+          <th class="border p-2">Số quyển</th>
           <th class="border p-2">Năm xuất bản</th>
-          <th class="border p-2">Hành động</th>
+          <th class="border p-2">Tác giả</th>
         </tr>
       </thead>
       <tbody>
