@@ -2,6 +2,7 @@ import createApiClient from "./api.service";
 class SachService {
     constructor(baseUrl = "/api/sach") {
         this.api = createApiClient(baseUrl);
+        console.log(this.api)
     }
     async getAll() {
         return (await this.api.get("/")).data;
