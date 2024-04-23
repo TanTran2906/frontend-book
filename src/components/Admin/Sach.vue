@@ -124,13 +124,52 @@
       </tbody>
     </table>
 
-    <!-- Form thêm/sửa sách -->
-    <book-form
+    <!-- Cửa sổ modal -->
+    <div
       v-if="showBookForm"
-      :book="currentBook"
+      class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50"
+    >
+      <div class="bg-white p-6 rounded shadow-md w-1/2 relative">
+        <!-- Dấu X được di chuyển vào bên trong phần chứa của modal -->
+        <button
+          @click="closeForm"
+          class="absolute top-10 right-10 p-2 text-gray-700 hover:text-gray-900"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.293 5.293a1 1 0 011.414 0L10 8.586l3.293-3.293a1 1 0 111.414 1.414L11.414 10l3.293 3.293a1 1 0 01-1.414 1.414L10 11.414l-3.293 3.293a1 1 0 01-1.414-1.414L8.586 10 5.293 6.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+        <!-- Sử dụng component BookForm bên trong modal -->
+        <book-form :book="currentBook || {}" @submit="handleFormSubmit" @close="closeForm" />
+      </div>
+    </div>
+    <!-- Form thêm/sửa sách -->
+    <!-- <book-form
+      v-if="showBookForm"
+      :book="currentBook || {}"
       @submit="handleFormSubmit"
       @close="closeForm"
-    />
+    /> -->
+
+    <!-- Thông báo nổi -->
+    <div
+      v-if="notification"
+      :class="[
+        notification.type === 'success' ? 'bg-green-500' : 'bg-red-500',
+        'fixed bottom-0 left-0 right-0 p-4 text-white text-center'
+      ]"
+    >
+      {{ notification.message }}
+    </div>
   </div>
 </template>
 
@@ -151,14 +190,15 @@ export default {
       isLoading: true, // Khởi tạo isLoading là true khi component được mount
       searchQuery: '',
       showBookForm: false,
-      currentBook: null
+      currentBook: null,
+      notification: null
     }
   },
   computed: {
     filteredBooks() {
       // Lọc danh sách sách dựa trên truy vấn tìm kiếm
       return this.books.filter((book) =>
-        book.TenSach.toLowerCase().includes(this.searchQuery.toLowerCase())
+        book.TenSach?.toLowerCase()?.includes(this.searchQuery.toLowerCase())
       )
     }
   },
@@ -167,7 +207,7 @@ export default {
       axios
         .get('http://localhost:3000/api/sach/')
         .then((response) => {
-          console.log('Danh sách sách:', response.data)
+          // console.log('Danh sách sách:', response.data)
           this.books = response.data
         })
         .catch((error) => {
@@ -192,24 +232,35 @@ export default {
       // Xóa sách khỏi danh sách và từ API
       if (confirm('Bạn có chắc chắn muốn xóa sách này không?')) {
         axios
-          .delete(`/api/books/${bookId}`)
+          .delete(`http://localhost:3000/api/sach/${bookId}`)
           .then(() => {
-            this.books = this.books.filter((b) => b.id !== bookId)
+            this.books = this.books.filter((b) => b._id !== bookId)
+            // Hiển thị thông báo xóa thành công
+            this.notification = { type: 'success', message: 'Xóa sách thành công' }
           })
           .catch((error) => {
             console.error('Error deleting book:', error)
+            // Hiển thị thông báo xóa thất bại
+            this.notification = { type: 'error', message: 'Xóa sách thất bại' }
+          })
+          .finally(() => {
+            // Sau 3 giây, đóng thông báo
+            setTimeout(() => {
+              this.notification = null
+            }, 3000)
           })
       }
     },
-    handleFormSubmit(book) {
+    handleFormSubmit(formData) {
       // Xử lý thêm hoặc chỉnh sửa sách
-      if (book.id) {
+      if (this.currentBook && this.currentBook._id) {
         // Chỉnh sửa sách
         axios
-          .put(`/api/books/${book.id}`, book)
+          .put(`http://localhost:3000/api/sach/${this.currentBook._id}`, formData)
           .then((response) => {
-            const index = this.books.findIndex((b) => b.id === book.id)
+            const index = this.books.findIndex((b) => b._id === this.currentBook._id)
             this.books.splice(index, 1, response.data)
+            this.fetchBooks()
             this.closeForm()
           })
           .catch((error) => {
@@ -218,9 +269,10 @@ export default {
       } else {
         // Thêm sách mới
         axios
-          .post('/api/books', book)
+          .post('http://localhost:3000/api/sach/', formData)
           .then((response) => {
             this.books.push(response.data)
+            this.fetchBooks()
             this.closeForm()
           })
           .catch((error) => {
