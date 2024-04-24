@@ -1,5 +1,5 @@
 <template>
-  <nav class="pl-72 flex justify-between items-center shadow-md h-16">
+  <nav class="pl-72 flex justify-between items-center shadow-md h-16 w-full">
     <!-- Logo -->
     <div class="flex items-center space-x-2">
       <img src="/img/icons/android-chrome-192x192.png" alt="Logo" class="w-8 h-8 rounded-full" />
@@ -23,7 +23,7 @@
           clip-rule="evenodd"
         />
       </svg>
-      <span class="ml-2">Đăng xuất</span>
+      <span class="ml-2 pr-10">Đăng xuất</span>
     </button>
   </nav>
 </template>

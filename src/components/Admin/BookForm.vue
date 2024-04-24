@@ -36,7 +36,7 @@
       <!-- Nhà xuất bản -->
       <div>
         <label for="publisher" class="block font-semibold mb-2">Nhà xuất bản:</label>
-        <select id="publisher" v-model="form.MaNXB" class="w-full p-2 border rounded-md">
+        <select id="publisher" v-model="form.MaNXB" class="w-full p-2 border rounded-md" required>
           <option value="" disabled>Chọn nhà xuất bản</option>
           <option v-for="publisher in publishers" :key="publisher._id" :value="publisher._id">
             {{ publisher.TenNXB }}
@@ -54,7 +54,8 @@
           placeholder="Nhập năm xuất bản"
           class="w-full p-2 border rounded-md"
           min="0"
-          max="9999"
+          step="1"
+          required
         />
       </div>
 
@@ -68,6 +69,8 @@
           placeholder="Nhập đơn giá"
           class="w-full p-2 border rounded-md"
           min="0"
+          step="1"
+          required
         />
       </div>
 
@@ -81,6 +84,8 @@
           placeholder="Nhập số quyển sách"
           class="w-full p-2 border rounded-md"
           min="0"
+          step="1"
+          required
         />
       </div>
 
@@ -93,6 +98,7 @@
           accept="image/*"
           @change="handleImageChange"
           class="w-full p-2 border rounded-md"
+          required
         />
         <img
           v-if="form.HinhAnh"

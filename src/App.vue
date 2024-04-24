@@ -1,31 +1,47 @@
 <template>
-  <div class="flex h-screen">
-    <!-- Sidebar -->
-    <Sidebar class="w-64 bg-gray-800 text-white" />
-
-    <!-- Main content -->
-    <!--flex-1: chiếm toàn bộ không gian còn lại không bị chiếm bởi Sidebar -->
-    <div class="flex flex-col flex-1">
-      <!-- Header -->
-      <AppHeader class="bg-white shadow-md" />
-
-      <!-- Main content area -->
-      <div class="pl-72">
+  <div>
+    <!-- Kiểm tra nếu đường dẫn là "/" thì chỉ hiển thị router-view -->
+    <template v-if="isHomePage">
+      <div class="h-screen">
         <router-view></router-view>
       </div>
-    </div>
+    </template>
+    <!-- Nếu không phải trang "/" -->
+    <template v-else>
+      <div class="flex h-screen">
+        <!-- Sidebar -->
+        <Sidebar class="w-64 bg-gray-800 text-white" />
+
+        <!-- Main content -->
+        <!--flex-1: chiếm toàn bộ không gian còn lại không bị chiếm bởi Sidebar -->
+        <div class="flex flex-col flex-1">
+          <!-- Header -->
+          <AppHeader class="bg-white shadow-md" />
+
+          <!-- Main content area -->
+          <div class="pl-72">
+            <router-view></router-view>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
-import AppHeader from './components/Admin/AppHeader.vue'
 import Sidebar from './components/Admin/Sidebar.vue'
+import AppHeader from './components/Admin/AppHeader.vue'
 
 export default {
-  name: 'App',
   components: {
-    AppHeader,
-    Sidebar
+    Sidebar,
+    AppHeader
+  },
+  computed: {
+    // Kiểm tra nếu đường dẫn là "/"
+    isHomePage() {
+      return this.$route.path === '/'
+    }
   }
 }
 </script>
