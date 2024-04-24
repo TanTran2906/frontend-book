@@ -12,6 +12,11 @@ const routes = [
   {
     path: "/admin/nhaxuatban",
     component: About,
+  },
+  // Thêm tuyến đường mặc định ở đây
+  {
+    path: "/",
+    redirect: "/admin/sach" // Chuyển hướng đến "/admin/sach" nếu không có đường dẫn nào được chỉ định
   }
 ]
 

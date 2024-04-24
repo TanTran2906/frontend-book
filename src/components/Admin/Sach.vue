@@ -268,16 +268,11 @@ export default {
           })
       } else {
         // Thêm sách mới
-        axios
-          .post('http://localhost:3000/api/sach/', formData)
-          .then((response) => {
-            this.books.push(response.data)
-            this.fetchBooks()
-            this.closeForm()
-          })
-          .catch((error) => {
-            console.error('Error adding book:', error)
-          })
+        axios.post('http://localhost:3000/api/sach/', formData).then((response) => {
+          this.books.push(response.data)
+          this.fetchBooks()
+          this.closeForm()
+        })
       }
     },
     closeForm() {

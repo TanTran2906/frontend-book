@@ -124,7 +124,7 @@ export default {
       default: () => ({
         TenSach: '',
         TacGia: '',
-        MaNXB: '',
+        MaNXB: null,
         NamXuatBan: '',
         DonGia: '',
         SoQuyen: '',
@@ -166,11 +166,6 @@ export default {
         HinhAnh: this.form.HinhAnh
       }
 
-      // Nếu có hình ảnh được chọn, thêm đường dẫn hình ảnh vào dữ liệu sách
-      if (this.form.HinhAnh && this.imageFile) {
-        bookData.HinhAnh = this.form.HinhAnh
-      }
-
       // Emit sự kiện submit với dữ liệu sách dưới dạng JSON
       this.$emit('submit', bookData)
     },
@@ -194,7 +189,9 @@ export default {
     // Phương thức xử lý sự kiện khi hình ảnh được thay đổi
     handleImageChange(event) {
       this.imageFile = event.target.files[0] // Lưu hình ảnh được chọn vào biến imageFile
-      this.uploadImageToServer() // Gửi hình ảnh lên server
+      if (this.imageFile) {
+        this.uploadImageToServer() // Gửi hình ảnh lên server nếu có hình ảnh được chọn
+      }
     },
     // Phương thức để lấy danh sách nhà xuất bản từ API
     fetchPublishers() {
