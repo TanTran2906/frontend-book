@@ -4,13 +4,13 @@
       <h2>Đăng nhập</h2>
       <input
         type="text"
-        v-model="SoDienThoai"
+        v-model="DienThoai"
         placeholder="Số điện thoại"
         pattern="[0-9]{10}"
         title="Số điện thoại phải có 10 chữ số"
         required
       />
-      <span class="error-message" v-if="!isSoDienThoaiValid"
+      <span class="error-message" v-if="!isDienThoaiValid"
         >Số điện thoại phải có đúng 10 chữ số</span
       >
 
@@ -36,9 +36,9 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      SoDienThoai: '',
+      DienThoai: '',
       Password: '',
-      isSoDienThoaiValid: true,
+      isDienThoaiValid: true,
       isPasswordValid: true,
       errorMessage: ''
     }
@@ -46,12 +46,12 @@ export default {
   methods: {
     async login() {
       try {
-        if (!this.isSoDienThoaiValid || !this.isPasswordValid) {
+        if (!this.isDienThoaiValid || !this.isPasswordValid) {
           return // Không thực hiện đăng nhập nếu có lỗi nhập liệu
         }
 
-        const response = await axios.post('http://localhost:3000/api/admin/login', {
-          SoDienThoai: this.SoDienThoai,
+        const response = await axios.post('http://localhost:3000/api/docgia/login', {
+          DienThoai: this.DienThoai,
           Password: this.Password
         })
 
@@ -60,7 +60,7 @@ export default {
 
         // Xử lý kết quả trả về sau khi đăng nhập thành công
         // Đăng nhập thành công, điều hướng đến trang /admin/sach
-        this.$router.push('/admin/sach')
+        this.$router.push('/')
 
         // Sau khi lưu thông tin, bạn có thể thực hiện các hành động khác như chuyển hướng trang
       } catch (error) {
@@ -70,8 +70,8 @@ export default {
     }
   },
   watch: {
-    SoDienThoai(value) {
-      this.isSoDienThoaiValid = /^[0-9]{10}$/.test(value)
+    DienThoai(value) {
+      this.isDienThoaiValid = /^[0-9]{10}$/.test(value)
     },
     Password(value) {
       this.isPasswordValid = /^[0-9]{6}$/.test(value)

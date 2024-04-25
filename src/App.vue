@@ -1,12 +1,12 @@
 <template>
   <div>
-    <!-- Kiểm tra nếu đường dẫn là "/" thì chỉ hiển thị router-view -->
-    <template v-if="isHomePage">
+    <!-- Kiểm tra nếu đường dẫn là "/" hoặc "/admin/login" thì chỉ hiển thị router-view -->
+    <template v-if="isHomePage || isLoginPage || isLoginGuest">
       <div class="h-screen">
         <router-view></router-view>
       </div>
     </template>
-    <!-- Nếu không phải trang "/" -->
+    <!-- Nếu không phải trang "/" hoặc "/admin/login" -->
     <template v-else>
       <div class="flex h-screen">
         <!-- Sidebar -->
@@ -41,6 +41,13 @@ export default {
     // Kiểm tra nếu đường dẫn là "/"
     isHomePage() {
       return this.$route.path === '/'
+    },
+    // Kiểm tra nếu đường dẫn là "/admin/login"
+    isLoginPage() {
+      return this.$route.path === '/admin/login'
+    },
+    isLoginGuest() {
+      return this.$route.path === '/login'
     }
   }
 }
